@@ -16,25 +16,26 @@ import java.nio.file.Path;
 import java.io.IOException;
 
 /** An example command that uses an example subsystem. */
-public class bounceAuto extends CommandBase {
+public class TrajectoryFollow extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final MyDriveTrain m_subsystem;
+  String trajectoryJSON;
 
   /**
-   * Creates a new bounceAuto.
+   * Creates a new TrajectoryFollow.
    *
    * @param subsystem The subsystem used by this command.
+   * @param trajectoryJSONToFollow filePath to pathweaver JSON file in format "dir/path.wpilib.json"
+   * |-----| dir - file path to json file from deploy directory (file should be put in deploy directory to be used) 
+   * |-----| path - name of pathWeaver path file
    */
-  public bounceAuto(MyDriveTrain subsystem) {
+  public TrajectoryFollow(MyDriveTrain subsystem, String trajectoryJSONToFollow) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
-  }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    String trajectoryJSON = "paths/YourPath.wpilib.json";
+    //import pathweaver file to trajectory that can be followed
+    trajectoryJSON = trajectoryJSONToFollow;
     Trajectory trajectory = new Trajectory();
     try {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
@@ -42,6 +43,12 @@ public class bounceAuto extends CommandBase {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
