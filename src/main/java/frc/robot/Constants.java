@@ -20,11 +20,6 @@ public final class Constants {
         public static final int kDriveR2 = 4;
         public static final int kIntake = 5;
         public static final int kArm = 7;
-        public static final double kS = 0.152;
-        public static final double kV = 0.722;
-        public static final double kA = 0.0719;
-        public static final double rSquared = 0.999;
-        public static final double trackWidth = 2.3900506827037105;
     }
 
     public static final class driveTrain {
@@ -37,6 +32,12 @@ public final class Constants {
 
         public static final double maxAutoSpeed = 0.8;
         public static final double minAutoSpeed = -0.8;
+
+        public static final double kS = 0.152;
+        public static final double kV = 0.722;
+        public static final double kA = 0.0719;
+        public static final double rSquared = 0.999;
+        public static final double trackWidth = 2.3900506827037105;
     }
 
     public static final class intake {
