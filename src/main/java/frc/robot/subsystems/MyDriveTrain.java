@@ -5,38 +5,36 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
+
+import edu.wpi.first.wpilibj.Encoder;
+
 import com.kauailabs.navx.frc.AHRS;
 
 public class MyDriveTrain extends SubsystemBase {
   /** Creates a new MyDriveTrain. */
-  private final DifferentialDrive driveSys;
-  CANSparkMax m_frontLeft;
+  
+  private final SpeedController m_leftA = new CANSparkMax(Constants.CANId.kDriveL1, MotorType.kBrushless);
+  private final SpeedController m_leftB = new CANSparkMax(Constants.CANId.kDriveL2, MotorType.kBrushless);
+  private final SpeedControllerGroup leftGroup = new SpeedControllerGroup(m_leftA, m_leftB);
+  private final SpeedControllerGroup rightGroup = new SpeedControllerGroup(new CANSparkMax(Constants.CANId.kDriveR1, MotorType.kBrushless), new CANSparkMax(Constants.CANId.kDriveR2, MotorType.kBrushless));
+  private final DifferentialDrive driveSys = new DifferentialDrive(leftGroup, rightGroup);
 
+  private final Encoder leftEncoder = new Encoder(m_leftA, m_leftB);
   // NavX class thing
   private AHRS ahrs;
 
   public MyDriveTrain() {
-    m_frontLeft = new CANSparkMax(Constants.CANId.kDriveL1, MotorType.kBrushless);
-    CANSparkMax m_rearLeft = new CANSparkMax(Constants.CANId.kDriveL2, MotorType.kBrushless);
-
-    SpeedControllerGroup leftGroup = new SpeedControllerGroup(m_frontLeft, m_rearLeft);
-
-    CANSparkMax m_frontRight = new CANSparkMax(Constants.CANId.kDriveR1, MotorType.kBrushless);
-    CANSparkMax m_rearRight = new CANSparkMax(Constants.CANId.kDriveR2, MotorType.kBrushless);
-
-    SpeedControllerGroup rightGroup = new SpeedControllerGroup(m_frontRight, m_rearRight);
-
-    driveSys = new DifferentialDrive(leftGroup, rightGroup);
-
     //try to set up connection to NavX, otherwise throw an error
     try {
       /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
