@@ -57,6 +57,9 @@ public final class Constants {
         public static final double kA = 0.0719;
         public static final double rSquared = 0.999;
         public static final double trackWidth = 2.3900506827037105;
+
+        //TODO: set this
+        public static final double kPosConversionFactor = 1;
     }
 
     public static final class intake {
