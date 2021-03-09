@@ -7,8 +7,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Constants.driveTrain;
 import frc.robot.subsystems.MyDriveTrain;
 
 public class AutoTurnCommand extends CommandBase {
