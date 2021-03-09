@@ -14,11 +14,20 @@ import edu.wpi.first.wpilibj.Filesystem;
 import java.nio.file.Path;
 import java.io.IOException;
 
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.PIDController;
+
+import frc.robot.Constants;
+
+
 /** An example command that uses an example subsystem. */
 public class TrajectoryFollow extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final MyDriveTrain m_subsystem;
+  private final MyDriveTrain locDriveTrain;
   String trajectoryJSON;
+  RamseteCommand ramseteCommand;
 
   /**
    * Creates a new TrajectoryFollow.
@@ -28,10 +37,10 @@ public class TrajectoryFollow extends CommandBase {
    * |-----| dir - file path to json file from deploy directory (file should be put in deploy directory to be used) 
    * |-----| path - name of pathWeaver path file
    */
-  public TrajectoryFollow(MyDriveTrain subsystem, String trajectoryJSONToFollow) {
-    m_subsystem = subsystem;
+  public TrajectoryFollow(MyDriveTrain driveTrain, String trajectoryJSONToFollow) {
+    locDriveTrain = driveTrain;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(driveTrain);
 
     //import pathweaver file to trajectory that can be followed
     trajectoryJSON = trajectoryJSONToFollow;
@@ -42,12 +51,32 @@ public class TrajectoryFollow extends CommandBase {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
+
+    //initialize ramsete command
+    ramseteCommand = new RamseteCommand(
+        trajectory,
+        locDriveTrain::getPose,
+        new RamseteController(Constants.driveTrain.kRamseteB, Constants.driveTrain.kRamseteZeta),
+        new SimpleMotorFeedforward(Constants.driveTrain.ksVolts,
+        Constants.driveTrain.kvVoltSecondsPerMeter,
+        Constants.driveTrain.kaVoltSecondsSquaredPerMeter),
+        Constants.driveTrain.kDriveKinematics,
+        locDriveTrain::getWheelSpeeds,
+        new PIDController(Constants.driveTrain.kPDriveVel, 0, 0),
+        new PIDController(Constants.driveTrain.kPDriveVel, 0, 0),
+        // RamseteCommand passes volts to the callback
+        locDriveTrain::tankDriveVolts,
+        locDriveTrain
+    );
+
+    // Reset odometry to the starting pose of the trajectory.
+    locDriveTrain.resetOdometry(trajectory.getInitialPose());
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    ramseteCommand.execute();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,11 +85,13 @@ public class TrajectoryFollow extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    locDriveTrain.tankDriveVolts(0, 0);     //stop any motion when command finishes
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return ramseteCommand.isFinished();
   }
 }

@@ -65,26 +65,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
 
-    RamseteCommand ramseteCommand = new RamseteCommand(
-        exampleTrajectory,
-        myDriveTrain::getPose,
-        new RamseteController(Constants.driveTrain.kRamseteB, Constants.driveTrain.kRamseteZeta),
-        new SimpleMotorFeedforward(Constants.driveTrain.ksVolts,
-        Constants.driveTrain.kvVoltSecondsPerMeter,
-        Constants.driveTrain.kaVoltSecondsSquaredPerMeter),
-        Constants.driveTrain.kDriveKinematics,
-        myDriveTrain::getWheelSpeeds,
-        new PIDController(Constants.driveTrain.kPDriveVel, 0, 0),
-        new PIDController(Constants.driveTrain.kPDriveVel, 0, 0),
-        // RamseteCommand passes volts to the callback
-        myDriveTrain::tankDriveVolts,
-        myDriveTrain
-    );
-
-    // Reset odometry to the starting pose of the trajectory.
-    myDriveTrain.resetOdometry(exampleTrajectory.getInitialPose());
-
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> myDriveTrain.tankDriveVolts(0, 0));
+    return autoCommand;
   }
 }
