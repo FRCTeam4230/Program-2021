@@ -45,8 +45,7 @@ public final class Constants {
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
 
-        //TODO: set this
-        public static final double kPosConversionFactor = 1;
+        public static final double kPosConversionFactor = 0.17;
     }
 
     public static final class intake {
