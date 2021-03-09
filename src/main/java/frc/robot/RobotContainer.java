@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.MyDriveTrain;
 import frc.robot.commands.MyTeleOpDriveCommand;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,29 +28,36 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import edu.wpi.first.wpilibj.examples.ramsetecommand.Constants.DriveConstants;
-
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.MyDriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.DriverStation;             //for error reporting
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+
 import java.nio.file.Path;
 import java.io.IOException;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+
+import java.util.List;
+
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.PIDController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -105,8 +111,8 @@ public class RobotContainer {
 
     // Create config for trajectory
     TrajectoryConfig config =
-        new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
-                             AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        new TrajectoryConfig(Constants.kMaxSpeedMetersPerSecond,
+                             Constants.kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(Constants.kDriveKinematics)
             // Apply the voltage constraint
@@ -129,24 +135,24 @@ public class RobotContainer {
 
     RamseteCommand ramseteCommand = new RamseteCommand(
         exampleTrajectory,
-        m_robotDrive::getPose,
-        new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+        myDriveTrain::getPose,
+        new RamseteController(Constants.kRamseteB, Constants.kRamseteZeta),
         new SimpleMotorFeedforward(Constants.ksVolts,
         Constants.kvVoltSecondsPerMeter,
         Constants.kaVoltSecondsSquaredPerMeter),
         Constants.kDriveKinematics,
-        m_robotDrive::getWheelSpeeds,
+        myDriveTrain::getWheelSpeeds,
         new PIDController(Constants.kPDriveVel, 0, 0),
         new PIDController(Constants.kPDriveVel, 0, 0),
         // RamseteCommand passes volts to the callback
-        m_robotDrive::tankDriveVolts,
-        m_robotDrive
+        myDriveTrain::tankDriveVolts,
+        myDriveTrain
     );
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    myDriveTrain.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
+    return ramseteCommand.andThen(() -> myDriveTrain.tankDriveVolts(0, 0));
   }
 }
