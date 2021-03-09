@@ -16,23 +16,40 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants;
-
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.EncoderType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 
 import com.kauailabs.navx.frc.AHRS;
 
 public class MyDriveTrain extends SubsystemBase {
   /** Creates a new MyDriveTrain. */
   
-  private final SpeedController m_leftA = new CANSparkMax(Constants.CANId.kDriveL1, MotorType.kBrushless);
-  private final SpeedController m_leftB = new CANSparkMax(Constants.CANId.kDriveL2, MotorType.kBrushless);
-  private final SpeedControllerGroup leftGroup = new SpeedControllerGroup(m_leftA, m_leftB);
+  private final CANSparkMax l1Motor = new CANSparkMax(Constants.CANId.kDriveL1, MotorType.kBrushless);
+  private final CANSparkMax m_left2 = new CANSparkMax(Constants.CANId.kDriveL2, MotorType.kBrushless);
+  private final SpeedControllerGroup leftGroup = new SpeedControllerGroup(l1Motor, m_left2);
   private final SpeedControllerGroup rightGroup = new SpeedControllerGroup(new CANSparkMax(Constants.CANId.kDriveR1, MotorType.kBrushless), new CANSparkMax(Constants.CANId.kDriveR2, MotorType.kBrushless));
   private final DifferentialDrive driveSys = new DifferentialDrive(leftGroup, rightGroup);
 
-  private final Encoder leftEncoder = new Encoder(m_leftA, m_leftB);
+  private CANEncoder l1Encoder;
   // NavX class thing
   private AHRS ahrs;
+
+  // Odometry class for tracking robot pose
+  private final DifferentialDriveOdometry m_odometry;
 
   public MyDriveTrain() {
     //try to set up connection to NavX, otherwise throw an error
@@ -45,6 +62,8 @@ public class MyDriveTrain extends SubsystemBase {
         DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
     }
     ahrs.reset();
+    l1Encoder = l1Motor.getEncoder(EncoderType.kQuadrature, 4096);
+    m_odometry = new DifferentialDriveOdometry(ahrs);
   }
 
   /**drive, but speed is limited to Constants.drivetrain.max/minAutoSpeed
