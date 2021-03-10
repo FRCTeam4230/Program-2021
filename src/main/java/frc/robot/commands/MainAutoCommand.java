@@ -15,6 +15,6 @@ public class MainAutoCommand extends SequentialCommandGroup {
   public MainAutoCommand(MyDriveTrain myDriveTrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new TrajectoryFollow(myDriveTrain, "paths/bounce/Path1.wpilib.json"));
+    addCommands(new TrajectoryFollow(myDriveTrain, "paths/bounce/output/Path1.wpilib.json"));
   }
 }

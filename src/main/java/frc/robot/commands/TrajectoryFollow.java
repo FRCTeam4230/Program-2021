@@ -51,7 +51,7 @@ public class TrajectoryFollow extends CommandBase {
     } catch (IOException ex) {
       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }
-
+    
     //initialize ramsete command
     ramseteCommand = new RamseteCommand(
         trajectory,
@@ -76,16 +76,19 @@ public class TrajectoryFollow extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ramseteCommand.execute();
+    ramseteCommand.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    ramseteCommand.execute();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    ramseteCommand.end(interrupted);
     locDriveTrain.tankDriveVolts(0, 0);     //stop any motion when command finishes
   }
 
