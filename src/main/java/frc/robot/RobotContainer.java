@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.MainAutoCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MyDriveTrain;
 import frc.robot.commands.MyTeleOpDriveCommand;
 
@@ -21,12 +22,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final MyDriveTrain myDriveTrain = new MyDriveTrain();
+  private final Intake myIntake = new Intake();
   private final XboxController driver1 = new XboxController(0);
 
  
   private final MyTeleOpDriveCommand m_driveCommand = new MyTeleOpDriveCommand(myDriveTrain, driver1);
 
-  private final MainAutoCommand autoCommand = new MainAutoCommand(myDriveTrain);
+  private final MainAutoCommand autoCommand = new MainAutoCommand(myDriveTrain, myIntake);
 
  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 

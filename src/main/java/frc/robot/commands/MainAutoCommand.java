@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MyDriveTrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -12,10 +13,12 @@ import frc.robot.subsystems.MyDriveTrain;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MainAutoCommand extends SequentialCommandGroup {
   /** Creates a new MainAutoCommand. */
-  public MainAutoCommand(MyDriveTrain myDriveTrain) {
+  public MainAutoCommand(MyDriveTrain myDriveTrain, Intake m_intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new TrajectoryFollow(myDriveTrain, "paths/test/output/Unnamed.wpilib.json"));
+    addCommands(new RunIntake(m_intake));
     addCommands(new TrajectoryFollow(myDriveTrain, "paths/test/output/Unnamed_0.wpilib.json"));
+    addCommands(new RunIOStop(m_intake));
   }
 }

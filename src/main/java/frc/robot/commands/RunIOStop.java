@@ -12,6 +12,12 @@ public class RunIOStop extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   public Intake m_subsystem;
 
+  public RunIOStop(Intake subsystem) {
+    m_subsystem = subsystem;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(subsystem);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
@@ -29,6 +35,6 @@ public class RunIOStop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
