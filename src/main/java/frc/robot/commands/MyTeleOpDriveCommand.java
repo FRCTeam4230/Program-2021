@@ -37,14 +37,6 @@ public class MyTeleOpDriveCommand extends CommandBase {
   public void execute() {
     locDriveTrain.drive(locDriverJoyStick.getY(GenericHID.Hand.kLeft)*Constants.driveTrain.speedMult,
                         locDriverJoyStick.getX(GenericHID.Hand.kRight)*Constants.driveTrain.rotMult, false, true);
-                        
-    if (locDriverJoyStick.getRawButtonPressed(5)) {
-      m_intake.outtakeRoller();
-    } else if (locDriverJoyStick.getRawButtonPressed(7)) {
-      m_intake.intakeRoller();
-    } else {
-      m_intake.stop();
-    }
   }
 
   // Called once the command ends or is interrupted.

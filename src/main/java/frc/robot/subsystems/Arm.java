@@ -17,17 +17,25 @@ public class Arm extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
-  private final TalonSRX arm;
+  private final TalonSRX armMotor;
   
 
   public Arm() {
 
-    arm = new TalonSRX(Constants.CANId.kArm);
+    armMotor = new TalonSRX(Constants.CANId.kArm);
 
   }
 
   public void armUp(){
+    armMotor.set(ControlMode.PercentOutput, Constants.arm.kArmUpSpeed);
+  }
 
+  public void armDown(){
+    armMotor.set(ControlMode.PercentOutput, Constants.arm.kArmDownSpeed);
+  }
+
+  public void stop() {
+    armMotor.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override
