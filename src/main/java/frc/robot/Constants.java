@@ -29,12 +29,12 @@ public final class Constants {
         public static final double maxAutoSpeed = 0.8;
         public static final double minAutoSpeed = -0.8;
 
-        public static final double ksVolts = 0.152;
-        public static final double kvVoltSecondsPerMeter = 0.722;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.0719;
-        public static final double kPDriveVel = 0.00145;
+        public static final double ksVolts = 0.156;
+        public static final double kvVoltSecondsPerMeter = 2.36;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.236;
+        public static final double kPDriveVel = 0.00253;
         public static final double krSquared = 0.999;
-        public static final double kTrackwidthMeters = 2.3900506827037105;
+        public static final double kTrackwidthMeters = 0.731074326474076;
 
         public static final DifferentialDriveKinematics kDriveKinematics =
             new DifferentialDriveKinematics(kTrackwidthMeters);
