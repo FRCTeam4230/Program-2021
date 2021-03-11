@@ -10,15 +10,19 @@ import frc.robot.subsystems.MyDriveTrain;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
+import frc.robot.subsystems.Intake;
+
 public class MyTeleOpDriveCommand extends CommandBase {
   /** Creates a new MyTeleOpDriveCommand. */
   MyDriveTrain locDriveTrain;
   XboxController locDriverJoyStick;
+  Intake m_intake;
 
 
-  public MyTeleOpDriveCommand(MyDriveTrain driveTrain, XboxController driverJoystick) {
+  public MyTeleOpDriveCommand(MyDriveTrain driveTrain, XboxController driverJoystick, Intake intake) {
     locDriveTrain = driveTrain;
     locDriverJoyStick = driverJoystick;
+    m_intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -33,6 +37,13 @@ public class MyTeleOpDriveCommand extends CommandBase {
   public void execute() {
     locDriveTrain.drive(locDriverJoyStick.getY(GenericHID.Hand.kLeft)*Constants.driveTrain.speedMult,
                         locDriverJoyStick.getX(GenericHID.Hand.kRight)*Constants.driveTrain.rotMult, false, true);
+    if (locDriverJoyStick.getRawButtonPressed(5)) {
+      m_intake.outtakeRoller();
+    } else if (locDriverJoyStick.getRawButtonPressed(7)) {
+      m_intake.intakeRoller();
+    } else {
+      m_intake.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.

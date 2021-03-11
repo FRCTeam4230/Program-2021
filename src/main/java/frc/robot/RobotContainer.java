@@ -26,7 +26,7 @@ public class RobotContainer {
   private final XboxController driver1 = new XboxController(0);
 
  
-  private final MyTeleOpDriveCommand m_driveCommand = new MyTeleOpDriveCommand(myDriveTrain, driver1);
+  private final MyTeleOpDriveCommand m_driveCommand = new MyTeleOpDriveCommand(myDriveTrain, driver1, myIntake);
 
   private final MainAutoCommand autoCommand = new MainAutoCommand(myDriveTrain, myIntake);
 
