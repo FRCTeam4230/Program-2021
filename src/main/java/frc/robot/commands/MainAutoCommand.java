@@ -17,8 +17,8 @@ public class MainAutoCommand extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new TrajectoryFollow(myDriveTrain, "paths/test/output/Unnamed.wpilib.json"));
-    addCommands(new RunIntake(m_intake));
+    m_intake.intakeRoller();
     addCommands(new TrajectoryFollow(myDriveTrain, "paths/test/output/Unnamed_0.wpilib.json"));
-    addCommands(new RunIOStop(m_intake));
+    m_intake.stop();
   }
 }
