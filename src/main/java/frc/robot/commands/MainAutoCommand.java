@@ -13,12 +13,12 @@ import frc.robot.subsystems.MyDriveTrain;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MainAutoCommand extends SequentialCommandGroup {
   /** Creates a new MainAutoCommand. */
-  public MainAutoCommand(MyDriveTrain myDriveTrain, Intake m_intake) {
+  public MainAutoCommand(MyDriveTrain myDriveTrain){//, Intake m_intake) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new TrajectoryFollow(myDriveTrain, "paths/test/output/Unnamed.wpilib.json"));
-    m_intake.intakeRoller();
+   // m_intake.intakeRoller();
     addCommands(new TrajectoryFollow(myDriveTrain, "paths/test/output/Unnamed_0.wpilib.json"));
-    m_intake.stop();
+   // m_intake.stop();
   }
 }

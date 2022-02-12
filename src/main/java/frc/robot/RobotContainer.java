@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.MainAutoCommand;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
+//import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.MyDriveTrain;
 import frc.robot.commands.MyTeleOpDriveCommand;
-import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunOutake;
-import frc.robot.commands.ArmDown;
-import frc.robot.commands.ArmUp;
-import frc.robot.subsystems.Arm;
+//import frc.robot.commands.RunIntake;
+//import frc.robot.commands.RunOutake;
+//import frc.robot.commands.ArmDown;
+//import frc.robot.commands.ArmUp;
+//import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -28,14 +28,14 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final MyDriveTrain myDriveTrain = new MyDriveTrain();
-  private final Intake myIntake = new Intake();
-  private final Arm myArm = new Arm();
+  //private final Intake myIntake = new Intake();
+  //private final Arm myArm = new Arm();
   private final XboxController driver1 = new XboxController(0);
 
  
-  private final MyTeleOpDriveCommand m_driveCommand = new MyTeleOpDriveCommand(myDriveTrain, driver1, myIntake);
+  private final MyTeleOpDriveCommand m_driveCommand = new MyTeleOpDriveCommand(myDriveTrain, driver1);//, myIntake);
 
-  private final MainAutoCommand autoCommand = new MainAutoCommand(myDriveTrain, myIntake);
+  private final MainAutoCommand autoCommand = new MainAutoCommand(myDriveTrain);//, myIntake);
 
  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
@@ -54,10 +54,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driver1, 6).whenHeld(new ArmUp(myArm));
-    new JoystickButton(driver1, 8).whenHeld(new ArmDown(myArm));
-    new JoystickButton(driver1, 5).whenHeld(new RunIntake(myIntake));
-    new JoystickButton(driver1, 7).whenHeld(new RunOutake(myIntake));
+    //new JoystickButton(driver1, 6).whenHeld(new ArmUp(myArm));
+    //new JoystickButton(driver1, 8).whenHeld(new ArmDown(myArm));
+    //new JoystickButton(driver1, 5).whenHeld(new RunIntake(myIntake));
+    //new JoystickButton(driver1, 7).whenHeld(new RunOutake(myIntake));
   }
 
   /**

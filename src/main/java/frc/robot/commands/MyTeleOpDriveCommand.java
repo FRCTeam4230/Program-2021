@@ -16,13 +16,13 @@ public class MyTeleOpDriveCommand extends CommandBase {
   /** Creates a new MyTeleOpDriveCommand. */
   MyDriveTrain locDriveTrain;
   XboxController locDriverJoyStick;
-  Intake m_intake;
+  //Intake m_intake;
 
 
-  public MyTeleOpDriveCommand(MyDriveTrain driveTrain, XboxController driverJoystick, Intake intake) {
+  public MyTeleOpDriveCommand(MyDriveTrain driveTrain, XboxController driverJoystick){//, Intake intake) {
     locDriveTrain = driveTrain;
     locDriverJoyStick = driverJoystick;
-    m_intake = intake;
+    //m_intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
     // Use addRequirements() here to declare subsystem dependencies.
